@@ -1,21 +1,26 @@
 import os
+from dotenv import load_dotenv
+
 import requests
 import pandas as pd
 import streamlit as st
 import pydeck as pdk
-from dotenv import load_dotenv
 
-st.title("AIS FastAPI Streamlit")
-st.write(
-    "A map display based on locally hosted Docker container running FastAPI. Data is fetched from a remote API. The map is interactive and can be filtered by number of records. Source code: https://github.com/ksubc/AIS-FastAPI-Streamlit."
-)
-
+# Load .env before anything else
 load_dotenv()
 
-API_URL = os.getenv("API_URL", "http://localhost:8000/vessels/")
-
+# 🚨 This must be your first Streamlit call 🚨
 st.set_page_config(page_title="AIS Map", layout="wide")
+
+# Now you can use Streamlit normally
 st.title("🗺️ AIS Vessel Tracker")
+st.write(
+    "A map display based on locally hosted Docker container running FastAPI. "
+    "Data is fetched from a remote API. The map is interactive and can be filtered "
+    "by number of records. Source code: https://github.com/ksubc/AIS-FastAPI-Streamlit."
+)
+
+API_URL = os.getenv("API_URL", "http://localhost:8000/vessels/")
 
 # Sidebar controls
 limit = st.sidebar.slider("Number of records", 10, 1000, 200)
@@ -54,6 +59,5 @@ deck = pdk.Deck(
     ],
 )
 st.pydeck_chart(deck)
-
 
 
